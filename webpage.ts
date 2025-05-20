@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FUCKING INTERACTIVE GLITCH FUCK - 1000 Collisions</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Arial Black', sans-serif;
+            color: #fff;
+            user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+
+        h1 {
+            font-size: 25vw;
+            letter-spacing: -4vw;
+            position: relative;
+            -webkit-text-stroke: 2px white;
+            color: black;
+            animation: glitch-skew 2s infinite alternate, glitch-color 3s infinite alternate;
+            transition: animation-duration 0.2s ease-out;
+        }
+
+        h1:hover {
+            animation-duration: 1s;
+        }
+
+        h1::before,
+        h1::after {
+            content: 'FUCK';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+            animation: glitch-anim 2s infinite alternate-reverse, glitch-color 3s infinite alternate-reverse;
+            opacity: 0.8;
+            transition: animation-duration 0.2s ease-out;
+        }
+
+        h1:hover::before,
+        h1:hover::after {
+            animation-duration: 1s;
+        }
+
+
+        h1::before {
+            left: 2px;
+            text-shadow: -2px 0 red;
+            clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+            animation-delay: -0.5s;
+        }
+
+        h1::after {
+            left: -2px;
+            text-shadow: 2px 0 blue;
+            clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+            animation-delay: -0.8s;
+        }
+
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-5deg); }
+            40% { transform: skew(5deg); }
+            60% { transform: skew(-3deg); }
+            80% { transform: skew(3deg); }
+            100% { transform: skew(0deg); }
+        }
+
+        @keyframes glitch-color {
+            0% { color: #fff; }
+            50% { color: #ccf; }
+            100% { color: #fff; }
+        }
+
+
+        @keyframes glitch-anim {
+            0% { clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transform: translate(0, 0); }
+            10% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: translate(10px, -10px); }
+            20% { clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transform: translate(-10px, 10px); }
+            30% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: translate(5px, -5px); }
+            40% { clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transform: translate(-5px, 5px); }
+            50% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: translate(0, 0); }
+            100% { clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transform: translate(0, 0); }
+        }
+
+
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #f0f;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .burst-particle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: burst-fade 1s forwards;
+        }
+
+        @keyframes burst-fade {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(2); }
+        }
+    </style>
+</head>
+<body>
+    <h1>FUCK</h1>
+    <script>
+        const textElement = document.querySelector('h1');
+        const body = document.body;
+        const particles = [];
+        const numParticles = 100;
+
+        for (let i = 0; i < numParticles; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            body.appendChild(particle);
+            particles.push(particle);
+            resetParticle(particle);
+        }
+
+        function resetParticle(particle) {
+            particle.x = Math.random() * window.innerWidth;
+            particle.y = Math.random() * window.innerHeight;
+            particle.vx = (Math.random() - 0.5) * 1; // Increased initial speed range
+            particle.vy = (Math.random() - 0.5) * 1; // Increased initial speed range
+            particle.style.left = `${particle.x}px`;
+            particle.style.top = `${particle.y}px`;
+        }
+
+        function updateParticles() {
+            particles.forEach(particle => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+
+                if (particle.x < 0 || particle.x > window.innerWidth) particle.vx *= -1;
+                if (particle.y < 0 || particle.y > window.innerHeight) particle.vy *= -1;
+
+                particle.style.left = `${particle.x}px`;
+                particle.style.top = `${particle.y}px`;
+            });
+            requestAnimationFrame(updateParticles);
+        }
+
+        updateParticles();
+
+
+        body.addEventListener('mousemove', (e) => {
+            particles.forEach(particle => {
+                const dx = particle.x - e.clientX;
+                const dy = particle.y - e.clientY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < 400) { // Increased interaction radius - particles react from further away
+                    const repelForce = 400 / distance; // Increased repel force - particles pushed harder
+                    particle.vx += (dx / distance) * repelForce * 0.1; // Even stronger repel force multiplier
+                    particle.vy += (dy / distance) * repelForce * 0.1; // Even stronger repel force multiplier
+                }
+            });
+        });
+
+        body.addEventListener('click', (e) => {
+            const burstCount = 30;
+            for (let i = 0; i < burstCount; i++) {
+                const burstParticle = document.createElement('div');
+                burstParticle.className = 'burst-particle';
+                burstParticle.style.left = `${e.clientX}px`;
+                burstParticle.style.top = `${e.clientY}px`;
+
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 5 + 5;
+                burstParticle.dx = Math.cos(angle) * speed;
+                burstParticle.dy = Math.sin(angle) * speed;
+
+                body.appendChild(burstParticle);
+
+                const animateBurst = () => {
+                    burstParticle.style.left = `${parseFloat(burstParticle.style.left) + burstParticle.dx}px`;
+                    burstParticle.style.top = `${parseFloat(burstParticle.style.top) + burstParticle.dy}px`;
+                    if (parseFloat(getComputedStyle(burstParticle).opacity) > 0) {
+                        requestAnimationFrame(animateBurst);
+                    } else {
+                        burstParticle.remove();
+                    }
+                };
+                animateBurst();
+            }
+        });
+
+
+    </script>
+</body>
+</html>
