@@ -3,6 +3,8 @@
 
 This webpage showcases an interactive visual effect featuring the word "FUCK" with a glitch animation. The page includes dynamic particles that move around the screen, reacting to mouse movements and clicks with burst effects.
 
+You can reach this webpage at https://fuck.pengo820.org/
+
 **Features**
 
 Glitch Effect: The text "FUCK" is styled with a glitch animation that skews and changes color continuously. On hover, the animation speeds up for a more intense effect.
