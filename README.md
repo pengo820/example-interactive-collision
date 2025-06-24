@@ -3,7 +3,6 @@
 
 This webpage showcases an interactive visual effect featuring the word "e.g." with a glitch animation. The page includes dynamic particles that move around the screen, reacting to mouse movements and clicks with burst effects. You are free to replace the example word with any other words you prefer.
 
-You can reach this webpage at https://collision.pengo820.org/
 
 ## Features
 
